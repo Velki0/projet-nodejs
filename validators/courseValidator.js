@@ -27,11 +27,15 @@ const courseValidatorBody = [
         .notEmpty().withMessage('L\'id de la catégorie (\'category\') rattachée doit être renseigné.')
         .isInt({ min: 1 }).withMessage('L\'id de la catégorie (\'category\') doit être un entier strictement positif.')
         .custom( async (categoryId) => {
-            const category = await categoryService.getCategoryById(categoryId);
-            if (!category) {
-                return Promise.reject(new Error("La catégorie (\'category\') renseignée n'existe pas en base de données."));
-            } else {
-                return true;
+            try{
+                const category = await categoryService.getCategoryById(categoryId);
+                if (!category) {
+                    return Promise.reject(new Error("La catégorie ('category') renseignée n'existe pas en base de données."));
+                } else {
+                    return true;
+                }
+            } catch (error) {
+                return Promise.reject(new Error("La catégorie ('category') renseignée n'a pas pu être vérifié en base de données."));
             }
         })
 ];

@@ -7,20 +7,24 @@ const categoryValidatorBody = (isUpdate) => [
         .isString().withMessage('Le nom (\'name\') doit être une chaîne de caractères.')
         .isLength({ min: 3 }).withMessage('Le nom (\'name\') doit contenir au minimum 3 caractères.')
         .custom( async (name, { req }) => {
-            const category = await categoryService.getCategoryByName(name);
-            if (category) {
-                // Si c'est une mise à jour (PUT), vérifier que la catégorie trouvée est bien celle en cours de modification.
-                if (isUpdate) {
-                    const categoryId = req.params.id;
-                    if (category.id !== parseInt(categoryId)) {
-                        return Promise.reject(new Error("Le nom de la catégorie (\'category\') existe déjà en base de données."));
-                    }
-                } else {
+            try{
+                const category = await categoryService.getCategoryByName(name);
+                if (category) {
+                    // Si c'est une mise à jour (PUT), vérifier que la catégorie trouvée est bien celle en cours de modification.
+                    if (isUpdate) {
+                        const categoryId = req.params.id;
+                        if (category.id !== parseInt(categoryId)) {
+                            return Promise.reject(new Error("Le nom de la catégorie ('category') existe déjà en base de données."));
+                        }
+                    } else {
                     // Si c'est une création (POST), rejeter si le nom existe déjà.
-                    return Promise.reject(new Error("Le nom de la catégorie (\'category\') existe déjà en base de données."));
+                    return Promise.reject(new Error("Le nom de la catégorie ('category') existe déjà en base de données."));
+                    }
                 }
+                return true;
+            } catch (error) {
+                return Promise.reject(new Error("Le nom de la catégorie ('category') n'a pas pu être vérifié en base de données."));
             }
-            return true;
         }),
     body('description')
         .optional(true)
