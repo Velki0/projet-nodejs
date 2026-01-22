@@ -8,8 +8,8 @@ const validate = require("../validators/validate");
 // Routes Basiques
 router.get('', categoryController.getAllCategories);
 router.get('/:id', categoryValidatorParamId, validate, categoryController.getCategoryById);
-router.post('', authMiddleware, categoryValidatorBody, validate, categoryController.createCategory);
-router.put('/:id', authMiddleware, categoryValidatorParamId, categoryValidatorBody, validate, categoryController.updateCategory);
+router.post('', authMiddleware, categoryValidatorBody(false), validate, categoryController.createCategory);
+router.put('/:id', authMiddleware, categoryValidatorParamId, categoryValidatorBody(true), validate, categoryController.updateCategory);
 router.delete('/:id', authMiddleware, categoryValidatorParamId, validate, categoryController.deleteCategory);
 
 module.exports = router;

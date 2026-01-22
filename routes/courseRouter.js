@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const courseController = require("../controllers/courseController");
-const { courseValidatorBody, courseValidatorParamId, courseValidatorParamLevel } = require("../validators/courseValidator");
+const { courseValidatorBody, courseValidatorParamId, courseValidatorParamLevel, courseValidatorParamKeyword, courseValidatorParamPrice } = require("../validators/courseValidator");
 const authMiddleware = require('../middlewares/authMiddleware');
 const validate = require("../validators/validate");
 
 // Routes avancées
 router.get('/level/:level', courseValidatorParamLevel, validate, courseController.getCoursesByLevel);
+router.get('/search', courseValidatorParamKeyword, validate, courseController.getCoursesBySearchKeyword);
+router.get('/filter', courseValidatorParamPrice, validate, courseController.getCoursesByFilterPrice);
 
 // Routes Basiques
 router.get('', courseController.getAllCourses);

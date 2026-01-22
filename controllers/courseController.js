@@ -39,6 +39,34 @@ const controller = {
 
     },
 
+    getCoursesBySearchKeyword: async (req, res) => {
+
+        try {
+            res.setHeader('Content-Type', 'application/json');
+            const keyword = req.query.keyword.toLowerCase();
+            const courses = await courseService.getCoursesBySearchKeyword(keyword);
+            courses.length > 0 ? res.status(200).json(courses) : res.status(404).send("Aucune correspondance le mot clef \'" + keyword + "\' renseigné.");
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+
+    },
+
+    getCoursesByFilterPrice: async (req, res) => {
+
+        try {
+            res.setHeader('Content-Type', 'application/json');
+            const minPrice = req.query.minPrice ? parseFloat(req.query.minPrice) : 0;
+            const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice) : +Infinity;
+            const courses = await courseService.getCoursesByFilterPrice(minPrice, maxPrice);
+            courses.length > 0 ? res.status(200).json(courses) : res.status(404).send("Aucune correspondance le filtre de prix entre \'" + minPrice + " et " + maxPrice + "\' renseigné.");
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+
+    },
+
+
     createCourse: async (req, res) => {
 
         try {

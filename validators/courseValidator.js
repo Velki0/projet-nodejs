@@ -1,5 +1,5 @@
-const { body, param } = require('express-validator');
-const { Category } = require('../sequelize/models/associations');
+const { body, param, query } = require('express-validator');
+const categoryService = require('../services/categoryService');
 
 const courseValidatorBody = [
     body('title')
@@ -26,8 +26,8 @@ const courseValidatorBody = [
     body('category_id')
         .notEmpty().withMessage('L\'id de la catégorie (\'category\') rattachée doit être renseigné.')
         .isInt({ min: 1 }).withMessage('L\'id de la catégorie (\'category\') doit être un entier strictement positif.')
-        .custom( async (id) => {
-            const category = await Category.findByPk(id);
+        .custom( async (categoryId) => {
+            const category = await categoryService.getCategoryById(categoryId);
             if (!category) {
                 return Promise.reject(new Error("La catégorie (\'category\') renseignée n'existe pas en base de données."));
             } else {
@@ -48,4 +48,29 @@ const courseValidatorParamLevel = [
         .isIn(['novice', 'medium', 'advanced']).withMessage('Le niveau (\'level\') doit être un choix parmis \'novice\', \'medium\' ou \'advanced\' uniquement.')
 ];
 
-module.exports = { courseValidatorBody, courseValidatorParamId, courseValidatorParamLevel };
+const courseValidatorParamKeyword = [
+    query('keyword')
+        .notEmpty().withMessage('Le champ keyword n\'est pas renseigné ou vide.')
+        .isString().withMessage('Le champ keyword doit être une chaîne de caractères.'),
+];
+
+const courseValidatorParamPrice = [
+    query('minPrice')
+        .optional(true)
+        .isFloat({ min: 0 }).withMessage('La valeur minimal du prix du cours (\'minPrice\') doit être un nombre décimal positif.'),
+    query('maxPrice')
+        .optional(true)
+        .isFloat({ min: 0 }).withMessage('La valeur maximal du prix du cours (\'minPrice\') doit être un nombre décimal positif.')
+        .custom((maxPrice, { req }) => {
+            if (req.query.minPrice !== undefined && req.query.maxPrice !== undefined) {
+                const minPrice = parseFloat(req.query.minPrice);
+                maxPrice = parseFloat(maxPrice);
+                if (maxPrice <= minPrice) {
+                    throw new Error('La valeur maximale du prix (\'maxPrice\') doit être strictement supérieure à la valeur minimale (\'minPrice\').');
+                }
+            }
+            return true;
+        }),
+];
+
+module.exports = { courseValidatorBody, courseValidatorParamId, courseValidatorParamLevel, courseValidatorParamKeyword, courseValidatorParamPrice };

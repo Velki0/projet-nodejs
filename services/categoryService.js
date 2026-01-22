@@ -14,6 +14,12 @@ const categoryService = {
 
     },
 
+    getCategoryByName: async (name) => {
+
+        return await Category.findOne({ where: { name: name }})
+
+    },
+
     createCategory: async (newCategory) => {
 
         return await Category.create(newCategory);

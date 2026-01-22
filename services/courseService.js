@@ -1,4 +1,5 @@
 const { Course } = require('../sequelize/models/associations');
+const { Op } = require('sequelize');
 
 const courseService = {
 
@@ -17,6 +18,28 @@ const courseService = {
     getCoursesByLevel: async (level) => {
 
         return await Course.findAll({ where: { level: level }});
+
+    },
+
+    getCoursesBySearchKeyword: async (keyword) => {
+
+        return await Course.findAll({ where: {
+            [Op.or]: [
+                { title: { [Op.like]: `%${keyword}%` } },
+                { description: { [Op.like]: `%${keyword}%` } },
+            ]
+        }});
+
+    },
+
+    getCoursesByFilterPrice: async (minPrice, maxPrice) => {
+
+        return await Course.findAll({ where: { 
+            price: { 
+                [Op.gte]: minPrice, 
+                [Op.lte]: maxPrice 
+            } 
+        }});
 
     },
 

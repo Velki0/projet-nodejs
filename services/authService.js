@@ -1,27 +1,18 @@
-const User = require('../sequelize/models/userModel');
+const userService = require('./userService');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const register = async (userData) => {
 
     const { username, email, password, role } = userData;
-
-    if(await User.findOne({ where: { username } })) {
-        throw new Error('Le username renseigné n\'est pas disponible, il existe déjà.');
-    }
-
-    if(await User.findOne({ where: { email } })) {
-        throw new Error('L\'email renseigné n\'est pas disponible, un autre compte est associé à cet email.');
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
-    return await User.create({ username, email, password: hashedPassword, role });
+    return await userService.createUser(username, email, hashedPassword, role);
 
 };
 
 const login = async (username, password) => {
 
-    const user = await User.findOne({ where: { username } });
+    const user = await userService.getUserByUsername(username);
     if (!user) {
         throw new Error('Le username est incorrect !');
     }
