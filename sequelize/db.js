@@ -11,7 +11,7 @@ const connectDB = async () => {
         await sequelize.authenticate();
         console.log('Connection réussi à la base de données.');
         require('./models/associations');
-        await sequelize.sync({ alter: true });
+        await sequelize.sync();
         console.log('Synchro réussi en BdD.');
     } catch (error) {
         console.error('Problème de connection avec la BdD : ', error);

@@ -1,8 +1,9 @@
 const express = require('express');
 const { connectDB } = require('./sequelize/db');
-const authRouter = require('./routes/authRouter')
-const courseRouter = require('./routes/courseRouter')
-const categoryRouter = require('./routes/categoryRouter')
+const authRouter = require('./routes/authRouter');
+const courseRouter = require('./routes/courseRouter');
+const categoryRouter = require('./routes/categoryRouter');
+const statsRouter = require('./routes/statsRouter')
 
 require("dotenv").config();
 const app = express();
@@ -12,7 +13,8 @@ connectDB();
 app.use(express.json());
 app.use('/auth', authRouter);
 app.use('/courses', courseRouter);
-app.use('/categories', categoryRouter)
+app.use('/categories', categoryRouter);
+app.use('/stats', statsRouter);
 
 app.listen (port, () => {
 

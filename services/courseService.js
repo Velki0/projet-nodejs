@@ -1,4 +1,6 @@
-const { Course } = require('../sequelize/models/associations');
+const { getStatsOnCourses } = require('../controllers/courseController');
+const { Course, Category } = require('../sequelize/models/associations');
+const sequelize = require('sequelize');
 const { Op } = require('sequelize');
 
 const courseService = {
@@ -40,6 +42,24 @@ const courseService = {
                 [Op.lte]: maxPrice 
             } 
         }});
+
+    },
+
+    getStatsOnCourses: async () => {
+
+        return await Course.findAll({
+            attributes: [
+                'category_id',
+                [sequelize.fn('COUNT', sequelize.col('Course.id')), 'courseCount']
+            ],
+            include: [{
+                model: Category,
+                as: 'category',
+                attributes: ['id', 'name']
+            }],
+            group: ['category_id', 'category.id'],
+            nest: true,
+        });
 
     },
 

@@ -1,4 +1,5 @@
 const User = require('../sequelize/models/userModel');
+const sequelize = require('sequelize');
 
 const userService = {
 
@@ -17,6 +18,19 @@ const userService = {
     createUser: async (username, email, hashedPassword, role) => {
 
         return await User.create({ username, email, password: hashedPassword, role });
+
+    },
+
+    getStatsOnUsers: async () => {
+
+        return await User.findAll({
+        attributes: [
+            'role',
+            [sequelize.fn('COUNT', sequelize.col('id')), 'userCount']
+        ],
+        group: ['role'],
+        raw: true,
+        });
 
     }
 

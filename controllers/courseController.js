@@ -66,6 +66,16 @@ const controller = {
 
     },
 
+    getStatsOnCourses: async (req, res) => {
+
+        try {
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).json(await courseService.getStatsOnCourses());
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+
+    },
 
     createCourse: async (req, res) => {
 
