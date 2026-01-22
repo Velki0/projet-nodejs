@@ -16,7 +16,7 @@ const categoryService = {
 
     getCategoryByName: async (name) => {
 
-        return await Category.findOne({ where: { name: name }})
+        return await Category.findOne({ where: { name: name }});
 
     },
 

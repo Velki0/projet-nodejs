@@ -1,5 +1,5 @@
 const User = require('../sequelize/models/userModel');
-const sequelize = require('sequelize');
+const { sequelize } = require('../sequelize/db');
 
 const userService = {
 
@@ -29,7 +29,7 @@ const userService = {
             [sequelize.fn('COUNT', sequelize.col('id')), 'userCount']
         ],
         group: ['role'],
-        raw: true,
+        raw: true
         });
 
     }

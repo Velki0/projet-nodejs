@@ -44,14 +44,14 @@ const courseValidatorParamId = [
 
 const courseValidatorParamLevel = [
     param('level')
-        .notEmpty().withMessage('Le niveau (\'level\') est obligatoire.')
+        .notEmpty().withMessage('Le niveau (\'level\') n\'est pas renseigné ou vide.')
         .isIn(['novice', 'medium', 'advanced']).withMessage('Le niveau (\'level\') doit être un choix parmis \'novice\', \'medium\' ou \'advanced\' uniquement.')
 ];
 
 const courseValidatorParamKeyword = [
     query('keyword')
         .notEmpty().withMessage('Le champ keyword n\'est pas renseigné ou vide.')
-        .isString().withMessage('Le champ keyword doit être une chaîne de caractères.'),
+        .isString().withMessage('Le champ keyword doit être une chaîne de caractères.')
 ];
 
 const courseValidatorParamPrice = [
@@ -70,7 +70,7 @@ const courseValidatorParamPrice = [
                 }
             }
             return true;
-        }),
+        })
 ];
 
 module.exports = { courseValidatorBody, courseValidatorParamId, courseValidatorParamLevel, courseValidatorParamKeyword, courseValidatorParamPrice };

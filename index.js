@@ -3,7 +3,7 @@ const { connectDB } = require('./sequelize/db');
 const authRouter = require('./routes/authRouter');
 const courseRouter = require('./routes/courseRouter');
 const categoryRouter = require('./routes/categoryRouter');
-const statsRouter = require('./routes/statsRouter')
+const statsRouter = require('./routes/statsRouter');
 
 require("dotenv").config();
 const app = express();

@@ -1,6 +1,5 @@
-const { getStatsOnCourses } = require('../controllers/courseController');
 const { Course, Category } = require('../sequelize/models/associations');
-const sequelize = require('sequelize');
+const { sequelize } = require('../sequelize/db');
 const { Op } = require('sequelize');
 
 const courseService = {
@@ -58,7 +57,7 @@ const courseService = {
                 attributes: ['id', 'name']
             }],
             group: ['category_id', 'category.id'],
-            nest: true,
+            nest: true
         });
 
     },

@@ -19,7 +19,7 @@ const controller = {
             res.setHeader('Content-Type', 'application/json');
             const id = req.params.id;
             const course = await courseService.getCourseById(id);
-            course ? res.status(200).json(course) : res.status(404).send("Aucune correspondance de cours avec l'id " + id + ".");
+            course ? res.status(200).json(course) : res.status(404).json({ message: "Aucune correspondance de cours avec l'id " + id + "." });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -32,7 +32,7 @@ const controller = {
             res.setHeader('Content-Type', 'application/json');
             const level = req.params.level;
             const courses = await courseService.getCoursesByLevel(level);
-            courses.length > 0 ? res.status(200).json(courses) : res.status(404).send("Aucune correspondance de cours avec le niveau (\'level\') " + level + " renseigné.");
+            courses.length > 0 ? res.status(200).json(courses) : res.status(404).json({ message: "Aucune correspondance de cours avec le niveau (\'level\') " + level + " renseigné." });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -45,7 +45,7 @@ const controller = {
             res.setHeader('Content-Type', 'application/json');
             const keyword = req.query.keyword.toLowerCase();
             const courses = await courseService.getCoursesBySearchKeyword(keyword);
-            courses.length > 0 ? res.status(200).json(courses) : res.status(404).send("Aucune correspondance le mot clef \'" + keyword + "\' renseigné.");
+            courses.length > 0 ? res.status(200).json(courses) : res.status(404).json({ message: "Aucune correspondance de cours avec le mot clef \'" + keyword + "\' renseigné." });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -59,7 +59,7 @@ const controller = {
             const minPrice = req.query.minPrice ? parseFloat(req.query.minPrice) : 0;
             const maxPrice = req.query.maxPrice ? parseFloat(req.query.maxPrice) : +Infinity;
             const courses = await courseService.getCoursesByFilterPrice(minPrice, maxPrice);
-            courses.length > 0 ? res.status(200).json(courses) : res.status(404).send("Aucune correspondance le filtre de prix entre \'" + minPrice + " et " + maxPrice + "\' renseigné.");
+            courses.length > 0 ? res.status(200).json(courses) : res.status(404).json({ message: "Aucune correspondance de cours avec le filtre de prix entre \'" + minPrice + " et " + maxPrice + "\' renseigné." });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -95,7 +95,7 @@ const controller = {
             res.setHeader('Content-Type', 'application/json');
             const id = req.params.id;
             const updatedCourse = await courseService.updateCourse(id, req.body);
-            updatedCourse ? res.json(updatedCourse) : res.status(404).send("Aucune correspondance de cours avec l'id " + id + ". Impossible de le modifier.");
+            updatedCourse ? res.json(updatedCourse) : res.status(404).json({ message: "Aucune correspondance de cours avec l'id " + id + ". Impossible de le modifier." });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -108,7 +108,7 @@ const controller = {
             res.setHeader('Content-Type', 'application/json');
             const id = req.params.id;
             const deletedCourse = await courseService.deleteCourse(id);
-            deletedCourse ? res.status(200).json({ message: "Le cours a été correctement supprimé.", course: deletedCourse }) : res.status(404).send("Aucune correspondance de cours avec l'id " + id + ". Impossible de le supprimer.");
+            deletedCourse ? res.status(200).json({ message: "Le cours a été correctement supprimé.", course: deletedCourse }) : res.status(404).json({ message: "Aucune correspondance de cours avec l'id " + id + ". Impossible de le supprimer." });
         } catch {
             res.status(500).json({ error: error.message });
         }

@@ -19,7 +19,7 @@ const categoryController = {
             res.setHeader('Content-Type', 'application/json');
             const id = req.params.id;
             const category = await categoryService.getCategoryById(id);
-            category ? res.status(200).json(category) : res.status(404).send("Aucune correspondance de catégorie (\'category\') avec l'id " + id + ".");
+            category ? res.status(200).json(category) : res.status(404).json({ message: "Aucune correspondance de catégorie (\'category\') avec l'id " + id + "." });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -44,7 +44,7 @@ const categoryController = {
             res.setHeader('Content-Type', 'application/json');
             const id = req.params.id;
             const updatedCategory = await categoryService.updateCategory(id, req.body);
-            updatedCategory ? res.json(updatedCategory) : res.status(404).send("Aucune correspondance de catégorie (\'category\') avec l'id " + id + ". Impossible de la modifier.");
+            updatedCategory ? res.json(updatedCategory) : res.status(404).json({ message: "Aucune correspondance de catégorie (\'category\') avec l'id " + id + ". Impossible de la modifier." });
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -57,7 +57,7 @@ const categoryController = {
             res.setHeader('Content-Type', 'application/json');
             const id = req.params.id;
             const deletedCategory = await categoryService.deleteCategory(id);
-            deletedCategory ? res.status(200).json({ message: "La catégorie (\'category\') a été correctement supprimé.", category: deletedCategory }) : res.status(404).send("Aucune correspondance de catégorie (\'category\') avec l'id " + id + ". Impossible de la supprimer.");
+            deletedCategory ? res.status(200).json({ message: "La catégorie (\'category\') a été correctement supprimé.", category: deletedCategory }) : res.status(404).json({ message: "Aucune correspondance de catégorie (\'category\') avec l'id " + id + ". Impossible de la supprimer." });
         } catch {
             res.status(500).json({ error: error.message });
         }
